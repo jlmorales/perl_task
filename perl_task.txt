@@ -1,0 +1,75 @@
+use strict;
+#use warnings;
+#I asserted no warnings because It was warning me about using given and when
+no warnings 'experimental';
+use feature 'say';
+use feature "switch";
+
+my @numbers = (2, -3, 29, 130, 56, -9, 45, 20, -1, 0);
+
+my @names = ('roBerT', 'Maria', 'michAEL', 'cHriS', 'ELizaBeTH');
+
+my @files = ('/home/user1/subfolder1/file1.txt', '/home/user2/subfolder2/file2.pdf', '/home/user3/subfolder3/file3.xlsx', '/home/user4/subfolder4/file4.pgp', '/home/user5/subfolder5/file5.pl');
+
+say "\nProcessing array \@numbers";
+
+say "Element count: ", scalar @numbers;
+
+my $min_num = $numbers[0];
+my $max_num = $numbers[0];
+
+foreach my $num (@numbers){
+	if ($num > $max_num){
+		$max_num = $num
+	}elsif($num < $min_num){
+		$min_num = $num
+	}
+}
+
+say "Max number: $max_num";
+say "Min number: $min_num\n";
+
+say "Processing array \@names";
+say "Element		Name";
+
+for(my $i = 0; $i < scalar @names; $i++){
+	$names[$i] = lc $names[$i];
+	$names[$i] = ucfirst $names[$i];
+	printf("%d		%s \n", $i + 1, $names[$i]);
+ 
+}
+
+say "\nProcessing array \@files\n";
+for (my $i = 0; $i < scalar @files; $i++){
+	my $file = $files[$i];
+	say "Full path: $file\n";
+	my @split_file = split('/', $file);
+	#say "@split_file";
+	if (scalar @split_file > 1) {
+		my @parent_dir_split =  @split_file[0 .. @split_file - 2];
+		my @parent_dir = join("/", @parent_dir_split);
+		my $file_name = @split_file[@split_file - 1];
+		say "Parent folder: @parent_dir\n";
+		say "File name: $file_name\n";
+		my @split_file_name = split(/\./, $file_name);
+		my $file_type = @split_file_name[1];
+		given($file_type) {
+			when($_ eq "pdf"){
+				say "File Type: PDF file\n";
+			}
+			when($_ eq "txt"){
+				say "File Type: Text file\n";
+			}
+			when($_ eq "xlsx"){
+				say "File Type: Excel file\n";
+			}
+			when($_ eq "pgp"){
+				say "File Type: Encrypted file\n";
+			}
+			when($_ eq "pl"){
+				say "File Type: Perl executable file\n";
+			}
+		}
+	}
+	
+}
